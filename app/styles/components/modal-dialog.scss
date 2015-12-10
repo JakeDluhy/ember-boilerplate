@@ -1,0 +1,58 @@
+.modal-wrapper {
+  position: fixed;
+  z-index: 90;
+  top: 0;
+  left: 0;
+
+  display: none;
+
+  width: 100vw;
+  height: 100vh;
+  .modal-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    background-color: rgba(0,0,0,.3);
+  }
+  .modal-box {
+    overflow: scroll;
+
+    width: 360px;
+    max-height: 80%;
+
+    transition: top .4s ease;
+
+    border-radius: 3px;
+    background-color: white;
+    -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
+            box-shadow: 0 5px 15px rgba(0,0,0,.5);
+
+    @include respond-to(handhelds) {
+      width: 300px;
+    }
+    @include absolute-center(top, 0);
+    .modal-header {
+      overflow: hidden;
+
+      text-align: center;
+
+      background-color: color($primary);
+      .close-modal {
+        position: absolute;
+        top: 5px;
+        right: 0;
+
+        cursor: pointer;
+        md-icon {
+          color: $light-text;
+        }
+      }
+    }
+  }
+  &.is-open .modal-box {
+    top: 50%;
+  }
+}

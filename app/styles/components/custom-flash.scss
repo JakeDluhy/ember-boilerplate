@@ -1,0 +1,45 @@
+.alert {
+  position: absolute;
+  z-index: 45;
+  top: 0;
+
+  overflow: hidden;
+
+  width: 100%;
+  height: 64px;
+
+  transition: top .5s ease;
+
+  color: $light-text;
+  &.active {
+    top: 64px;
+  }
+  &.alert-success {
+    background-color: color($success, '700');
+  }
+  &.alert-warning {
+    background-color: color($warning, '600');
+  }
+  &.alert-info {
+    background-color: color($info, '700');
+  }
+  &.alert-danger {
+    background-color: color($warn, '700');
+  }
+  .flash-content {
+    @include absolute-center();
+    @include respond-to(handhelds) {
+      font-size: 14px;
+    }
+  }
+  .exit-flash {
+    position: absolute;
+    top: 16px;
+    right: 40px;
+
+    cursor: pointer;
+    md-icon {
+      color: $light-text;
+    }
+  }
+}

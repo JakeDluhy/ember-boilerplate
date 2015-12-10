@@ -1,0 +1,21 @@
+<div class="welcome-banner">
+  <div class="opacity-shield">
+    <div class="welcome-container">
+      <h1 class="white-text">Welcome to My Company</h1>
+      <h3 class="white-text">The coolest app ever</h3>
+      {{#paper-button raised=true primary=true action="callToAction" }}Let's get started!{{/paper-button}}
+    </div>
+  </div>
+</div>
+<div class="email-signup-banner">
+  <div class="email-signup-content">
+    <h2>Sign up for the mailing list!</h2>
+    {{paper-input label="Email" type="email" value=mailingListEmail}}
+    {{#paper-button raised=true primary=true action="submitToMailingList" }}Sign up!{{/paper-button}}
+    <h2>Want to get in touch?</h2>
+    {{#paper-button raised=true primary=true action="openContactModal"}}Contact us{{/paper-button}}
+  </div>
+</div>
+{{#modal-dialog modalTitle='Contact Us!' isOpen=contactModalOpen}}
+  {{user-contact submitSuccess="onContactSubmit"}}
+{{/modal-dialog}}

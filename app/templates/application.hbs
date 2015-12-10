@@ -1,3 +1,80 @@
-<h2 id="title">Welcome to Ember</h2>
+<div id="paper-wormhole"></div>
+{{#paper-nav-container}}
+  <div class="toolbar-wrapper">
+    {{#paper-toolbar}}
+      <div class="md-toolbar-tools">
+        <div class="nav-link">{{#link-to 'index'}}Logo{{/link-to}}</div>
+
+        <div class="nav-section">
+          {{#if session.isAuthenticated}}
+            <div class="nav-link">{{#link-to 'users.settings'}}Settings{{/link-to}}</div>
+            <div class="nav-link"><a href="#" {{action 'logoutUser'}}>Log Out</a></div>
+          {{else}}
+            <div class="nav-link"><a href="#" {{action 'showLoginModal'}}>Log In</a></div>
+          {{/if}}
+        </div>
+      </div>
+      <div class="mobile-navbar">
+        <table>
+          <tr>
+            <td>
+              {{#paper-sidenav-toggle as |toggle|}}
+                <a href="#" {{action 'openSidenav' toggle}} class="mobile-icon-link">
+                  {{paper-icon icon="menu" size=2}}
+                  <span class="icon-label">menu</span>
+                </a>
+              {{/paper-sidenav-toggle}}
+            </td>
+            <td>
+              {{paper-icon icon="menu" size=2}}
+              <span class="icon-label">option1</span>
+            </td>
+            <td>
+              {{paper-icon icon="menu" size=2}}
+              <span class="icon-label">option2</span>
+            </td>
+            <td>
+              {{#if session.isAuthenticated}}
+                {{#link-to 'users.settings' class="mobile-icon-link"}}
+                  {{paper-icon icon="person" size=2}}
+                  <span class="icon-label">settings</span>
+                {{/link-to}}
+              {{else}}
+                <a href="#" {{action 'showLoginModal'}} class="mobile-icon-link">
+                  {{paper-icon icon="input" size=2}}
+                  <span class="icon-label">log in</span>
+                </a>
+              {{/if}}
+            </td>
+          </tr>
+        </table>
+      </div>
+    {{/paper-toolbar}}
+    {{#each flashMessages.queue as |flash|}}
+      {{#custom-flash flash=flash}}
+          {{flash.message}}
+      {{/custom-flash}}
+    {{/each}}
+  </div>
+
+  {{#paper-sidenav class="md-sidenav-left md-whiteframe-z2" locked-open=""}}
+    {{#paper-content}}
+      {{#paper-list}}
+        {{#paper-item action="transitionTo" param="index"}}Home{{/paper-item}}
+        {{#if session.isAuthenticated}}
+          {{#paper-item action="logoutUser"}}Log out{{/paper-item}}
+        {{/if}}
+      {{/paper-list}}
+    {{/paper-content}}
+  {{/paper-sidenav}}
+{{/paper-nav-container}}
+
+{{#modal-dialog modalTitle='Log In' isOpen=loginModalOpen}}
+  {{user-login onSubmitSuccess='closeLoginModal'}}
+{{/modal-dialog}}
 
 {{outlet}}
+
+<div class="footer">
+  Copyright &copy; 2015 My Company
+</div>

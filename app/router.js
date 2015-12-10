@@ -6,6 +6,15 @@ const Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+  this.route('users', { resetNamespace: true }, function() {
+    this.route('register');
+    this.route('login');
+    this.route('profile', { path: '/:userId' });
+    this.route('forgot');
+    this.route('settings');
+    this.route('reset', { path: 'reset/:resetCode' });
+  });
+  this.route('contact');
 });
 
 export default Router;

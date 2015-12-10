@@ -1,0 +1,31 @@
+// Calc for a property given an expression;
+@mixin calc($property, $expression) {
+  #{$property}: -webkit-calc(#{$expression});
+  #{$property}:         calc(#{$expression});
+}
+
+// Default is just using @include absolute-center
+// By specifying a property and value you can set it off center for one prop
+@mixin absolute-center($property: top, $value: 50%) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  -webkit-transform: translate(-50%, -50%);
+     -moz-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+
+  #{$property}: $value;
+}
+
+// Respond to different media sizes
+$break-small: 320px;
+$break-medium: 800px;
+@mixin respond-to($media) {
+  @if $media == handhelds {
+    @media only screen and (min-width: $break-small) and (max-width: $break-medium) {
+      @content;
+    }
+  }
+}

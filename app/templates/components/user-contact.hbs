@@ -1,0 +1,12 @@
+{{#paper-select placeholder="What do you want to talk about?" model=selectedContactType}}
+  {{#each contactTypes as |contactType|}}
+    {{#paper-option value=contactType}}
+      {{contactType}}
+    {{/paper-option}}
+  {{/each}}
+{{/paper-select}}
+
+{{paper-input label="Name" value=nameValue}}
+{{paper-input label="Email" value=emailValue required=true customValidation=emailValidation}}
+{{paper-input label="Comment" textarea=true value=commentValue required=true}}
+{{#paper-button raised=true primary=true action="formSubmit" class="float-right"}}Submit{{/paper-button}}

@@ -1,0 +1,19 @@
+{{#if withOverlay}}
+  <div class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="white-text">{{modalTitle}}</h3>
+        {{#paper-button action="closeModal" class="close-modal" icon-button=true}}
+          {{paper-icon icon="close" size=2}}
+        {{/paper-button}}
+      </div>
+      <div class="modal-body">
+        {{yield}}
+      </div>
+    </div>
+  </div>
+{{else}}
+  <div class="modal-box">
+    {{yield}}
+  </div>
+{{/if}}

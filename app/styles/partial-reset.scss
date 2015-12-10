@@ -1,0 +1,14 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: auto;
+  margin-top: $toolbar-height;
+  padding-bottom: 60px;
+
+  @include calc(min-height, '100% - 64px');
+  & > .ember-view {
+    overflow: auto;
+  }
+}

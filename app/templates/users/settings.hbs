@@ -1,0 +1,15 @@
+{{#paper-grid-list md-cols-sm="1" md-cols="2" md-gutter="12px" md-row-height="400px"}}
+  {{#paper-grid-tile md-colspan="1"}}
+    <div>
+      <h1 class="center-text">Update Settings</h1>
+      {{user-settings}}
+    </div>
+  {{/paper-grid-tile}}
+
+  {{#paper-grid-tile md-colspan="1"}}
+    <div>
+      <h1 class="center-text">Change Password</h1>
+      {{user-change-password transition='transition'}}
+    </div>
+  {{/paper-grid-tile}}
+{{/paper-grid-list}}

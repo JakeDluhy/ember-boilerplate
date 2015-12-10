@@ -1,0 +1,79 @@
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+}
+
+.white-text {
+  color: rgba(255,255,255,.87);
+}
+
+.center-text {
+  text-align: center;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}
+
+.no-margin {
+  margin: 0;
+}
+
+.no-margin-left {
+  margin-left: 0;
+}
+
+.no-margin-right {
+  margin-right: 0;
+}
+
+.no-margin-bottom {
+  margin-bottom: 0;
+}
+
+.no-margin-top {
+  margin-top: 0;
+}
+
+.no-padding {
+  margin: 0;
+}
+
+.no-padding-left {
+  margin-left: 0;
+}
+
+.no-padding-right {
+  margin-right: 0;
+}
+
+.no-padding-bottom {
+  margin-bottom: 0;
+}
+
+.no-padding-top {
+  margin-top: 0;
+}
+
+.set-width-and-center {
+  width: 360px;
+  margin: 0 auto;
+  padding: 15px;
+
+  @include respond-to(handhelds) {
+    width: 300px;
+  }
+}
+.set-small-width-and-center {
+  width: 300px;
+  margin: 0 auto;
+  padding: 15px;
+}
+.set-max-width-and-center {
+  max-width: 360px;
+  margin: 0 auto;
+  padding: 15px;
+}

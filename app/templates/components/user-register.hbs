@@ -1,0 +1,17 @@
+{{paper-input label="First Name" value=firstNameValue}}
+{{paper-input label="Last Name" value=lastNameValue}}
+{{paper-input label="Email" type="email" value=emailValue required=true customValidation=emailValidation}}
+{{paper-input label="Password" type="password" value=passwordValue required=true customValidation=passwordValidation}}
+<div class="bottom-container">
+  <div class="float-left">
+    {{#paper-checkbox checked=mailingList class="no-margin-left"}}Sign up for our mailing list!{{/paper-checkbox}}
+  </div>
+  {{#paper-button raised=true primary=true action="registerSubmit" class="float-right" }}Register{{/paper-button}}
+</div>
+<h5 class="center-text">Already registered? 
+{{#if transitionToRoute}}
+  {{#link-to 'users.login'}}Log In{{/link-to}}
+{{else}}
+  <a href="#" {{action 'transitionToLogin'}}>Log In</a>
+{{/if}}
+</h5>

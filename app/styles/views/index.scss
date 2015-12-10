@@ -1,0 +1,43 @@
+.welcome-banner {
+  position: relative;
+
+  width: 100%;
+
+  @include calc(height, '500px');
+  .opacity-shield {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    background-color: rgba(0,0,0,.7);
+  }
+  .welcome-container {
+    width: 460px;
+
+    text-align: center;
+
+    @include respond-to(handhelds) {
+      width: 320px;
+    }
+    @include absolute-center();
+  }
+}
+
+.email-signup-banner {
+  padding: 40px 0;
+  .email-signup-content {
+    width: 70%;
+    margin: 0 auto;
+
+    text-align: center;
+    md-input-container {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+
+      text-align: left;
+    }
+  }
+}

@@ -1,0 +1,24 @@
+$theme-name: "default";
+
+$primary: "indigo";
+$accent: "blue-grey";
+$success: "green";
+$warning: 'orange';
+$info: 'blue';
+$warn: "red";
+$background: "grey";
+$link: "light-blue";
+
+$dark: false;
+$default-color: '500';
+
+$foreground: "foreground-dark";
+$foreground-shadow: $foreground-light-shadow;
+
+$base-background-color: white;
+$base-color: rgba(0, 0, 0, 0.87);
+
+$light-text: color('grey', '100');
+$light-text-hover: color('grey', '300');
+$dark-text: color('grey', '800');
+$divider: rgba(0,0,0,0.12);

@@ -1,0 +1,9 @@
+{{paper-input label="First Name" value=firstNameValue}}
+{{paper-input label="Last Name" value=lastNameValue}}
+{{paper-input label="Email" type="email" value=emailValue required=true customValidation=emailValidation}}
+<div class="bottom-container">
+  <div class="float-left">
+    {{#paper-checkbox checked=mailingList class="no-margin-left"}}Mailing list signup{{/paper-checkbox}}
+  </div>
+  {{#paper-button raised=true primary=true action="userSettingsSubmit" class="float-right" }}Update{{/paper-button}}
+</div>
