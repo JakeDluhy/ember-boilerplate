@@ -7,8 +7,36 @@ export default Ember.Route.extend(TransitionHandlers, {
     this.set('resetCode', params.resetCode)
   },
 
-  setupController(controller, model) {
-    // Assign resetCode in the controller to the url param - so it can be accessed by component
-    controller.set('resetCode', this.get('resetCode'));
+  actions: {
+    /**
+     * Send the request with the new password and the reset code value
+     * @param  {String} newPassword - the new password to send with the request
+     */
+    resetPassword(newPassword) {
+      let self = this;
+
+      Ember.$.ajax({
+        type: 'PUT',
+        url: '/api/users/reset_password',
+        data: {
+          data: {
+            type: 'resetCode',
+            id: null,
+            attributes: {
+              newPassword: newPassword,
+              resetCode: self.get('resetCode')
+            }
+          }
+        }
+      })
+      .done(() => {
+        Ember.get(this, 'flashMessages').success('Password successfully reset. Log in and try it out!');
+        self.send('transition', 'index');
+      })
+      .fail((xhr) => {
+        let err = JSON.parse(xhr.responseText);
+        Ember.get(this, 'flashMessages').danger(err.errors.error);
+      });
+    }
   }
 });

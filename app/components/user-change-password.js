@@ -1,72 +1,72 @@
+/**
+ * This component has two uses
+ * 1. To act as a update password form for logged in users
+ * 2. To act as a set my password after reseting it form for non-logged in users
+ * The component defaults to acting as an udpate password form
+ */
+
 import Ember from 'ember';
 import AuthValidations from '../mixins/auth-validations';
 
 export default Ember.Component.extend(AuthValidations, {
-  currentUser: Ember.inject.service('current-user'),
-
+  /** @type {Array} Bind the class to attributes */
   classNameBindings: [':set-small-width-and-center'],
 
-  // Default form values
+  /**
+   * Is this form being used as a password reset form or a password update form
+   * @type {Boolean}
+   * @default  false
+   */
   passwordReset: false,
-  resetCodeValue: '',
+
+  /** @type {String} The old password confirmation value */
   oldPasswordValue: '',
+
+  /** @type {String} The new password to change to */
   newPasswordValue: '',
+
+  /** @type {String} The new password confirmation */
   confirmNewPasswordValue: '',
 
-  // Does the new password meeting the confirmation?
+  /**
+   * Check whether the password and password confirmation values are equal
+   * @return {Boolean} Are the two new passwords the same?
+   */
   passwordsAreEqual() {
     return (this.get('newPasswordValue') === this.get('confirmNewPasswordValue'));
   },
 
-  // Use the current user service to update the user password, sending the old and new passwords through
+  /** Update the current user using the current-user service, sending the new and old passwords */
   updateUserPassword() {
     var self = this;
 
-    return self.get('currentUser').updateUserPassword({
+    return self.get('current-user').updateUserPassword({
       oldPassword: self.get('oldPasswordValue'),
       newPassword: self.get('newPasswordValue')
     })
     .then(() => {
       Ember.get(this, 'flashMessages').success('Password successfully updated');
       self.sendAction('transition', 'index');
-    });
-  },
-
-  // Reset the users password, sending the reset code and new password
-  resetPassword() {
-    var self = this;
-
-    return new Ember.RSVP.Promise((resolve, reject) => {
-      Ember.$.ajax({
-        type: 'PUT',
-        url: '/api/users/reset_password',
-        data: {
-          user: {
-            newPassword: self.get('newPasswordValue'),
-            resetCode: self.get('resetCodeValue')
-          }
-        }
-      })
-      .done(resolve)
-      .fail((xhr) => {
-        reject(JSON.parse(xhr.responseText));
-      });
-    })
-    .then(() => {
-      Ember.get(this, 'flashMessages').success('Password successfully reset. Log in and try it out!');
-      self.sendAction('transition', 'index');
+    }).
+    catch((err) => {
+      Ember.get(this, 'flashMessages').danger(err.errors.error);
     });
   },
 
   actions: {
-    // On submitting the change password request, check whether passwords are equal
-    // If they are, is the component being used to reset the password or update, which require different requests
+    /**
+     * On submitting the change password request, check whether passwords are equal
+     * If they are, is the component being used to reset the password or update?
+     * If updating, call the updateUserPassword method
+     * If reseting, send the sendResetPassword action
+     */
     changePasswordSubmit() {
       if(this.passwordsAreEqual()) {
-        Ember.run(this, (this.get('passwordReset') ? this.resetPassword : this.updateUserPassword))
-        .catch((err) => {
-          Ember.get(this, 'flashMessages').danger(err.error);
-        });
+        if(this.get('passwordReset')) {
+          this.sendAction('sendResetPassword', this.get('newPasswordValue'));
+        } else {
+          this.updateUserPassword();
+        }
       } else {
         Ember.get(this, 'flashMessages').danger('New Passwords must match');
       }

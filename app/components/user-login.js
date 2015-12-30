@@ -1,23 +1,44 @@
+/**
+ * 
+ */
+
 import Ember from 'ember';
 import AuthValidations from '../mixins/auth-validations';
 
 export default Ember.Component.extend(AuthValidations, {
+  /** @type {object} Inject the session service */
   session: Ember.inject.service('session'),
 
+  /** @type {String} The name of the component tag */
   tagName: 'div',
+
+  /** @type {Array} Bind the class to attributes */
   classNameBindings: [':user-auth-wrapper', ':set-width-and-center'],
 
-  // Default form values
+  /** @type {String} The value of the email field */
   emailValue: '',
+
+  /** @type {String} The value of the password field */
   passwordValue: '',
+
+  /** @type {Boolean} Should we remember the session? Difference between local storage and session storage */
   rememberMe: true,
 
-  // Component options:
-  // If true, link to register route instead of switching modal views
+  /**
+   * The component can be rendered in two places, within the modal or in a route
+   * By default, it will transition to the register route when clicking the register link
+   * Otherwise, it will switch the modal view
+   * @default true
+   * @type {Boolean}
+   */
   transitionToRoute: true,
 
   actions: {
-    // Log in using the ember-simple-auth interface
+    /**
+     * Log In using ember-simple-auth, with the form data
+     * On success, display a success message and send the action for submit success
+     * On failure, disaply an error message
+     */
     loginSubmit() {
       var self = this;
 
@@ -31,11 +52,11 @@ export default Ember.Component.extend(AuthValidations, {
         self.sendAction('onSubmitSuccess');
       })
       .catch((err) => {
-        Ember.get(this, 'flashMessages').danger(`Unable to login: ${err.error}`);
+        Ember.get(this, 'flashMessages').danger(`Unable to login: ${err.errors.error}`);
       });
     },
 
-    // Clicking on the switch link will transition the view to registration (if modal)
+    /** Clicking on the switch link will transition the view to registration (if modal) */
     transitionToReg() {
       this.sendAction('transitionToReg', 'register');
     }

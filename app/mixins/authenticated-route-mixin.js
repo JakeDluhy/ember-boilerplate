@@ -4,10 +4,14 @@ import { TRANSITION_ROUTES } from '../utils/constants';
 const { service } = Ember.inject;
 
 export default Ember.Mixin.create({
+  /** @type {object} Session service */
   session: service('session'),
 
-  // Essentially an extended authenticated route mixin
-  // I wanted to show a flash message warning when redirecting
+  /**
+   * Before the model is fetched, check whether the user is authenticated using ember-simple-auth
+   * @param  {String} transition The attempted transition
+   * If the user is not authenticated, redirect to the login route, after which redirect to the previously attempted transition
+   */
   beforeModel(transition) {
     if (!this.get('session.isAuthenticated')) {
       transition.abort();

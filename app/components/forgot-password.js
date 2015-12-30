@@ -2,13 +2,18 @@ import Ember from 'ember';
 import AuthValidations from '../mixins/auth-validations';
 
 export default Ember.Component.extend(AuthValidations, {
+  /** @type {Array} Bind the classes */
   classNameBindings: [':set-width-and-center'],
 
-  // Default values
+  /** @type {String} The value of the email entry */
   emailValue: '',
 
   actions: {
-    // Submit the forgot password request
+    /**
+     * Submit the form through an ajax request
+     * Will send a flash on success or error
+     * @redirects to the index after a successful request
+     */
     forgotSubmit() {
       var self = this;
 
@@ -16,16 +21,22 @@ export default Ember.Component.extend(AuthValidations, {
         type: 'POST',
         url: '/api/recover_password',
         data: {
-          email: self.get('emailValue')
+          data: {
+            type: 'user',
+            id: null,
+            attributes: {
+              email: self.get('emailValue')
+            }
+          }
         }
       })
       .done((data) => {
-        Ember.get(self, 'flashMessages').success(data.success);
+        Ember.get(self, 'flashMessages').success(data.meta.success);
         this.sendAction('onSubmitSuccess', 'index');
       })
       .fail((xhr) => {
         var response = JSON.parse(xhr.responseText);
-        Ember.get(self, 'flashMessages').danger(response.error);
+        Ember.get(self, 'flashMessages').danger(response.errors.error);
       });
     }
   }

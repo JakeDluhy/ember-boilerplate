@@ -4,9 +4,14 @@ import { TRANSITION_ROUTES } from '../utils/constants';
 const { service } = Ember.inject;
 
 export default Ember.Mixin.create({
+  /** @type {Object} The session service */
   session: service('session'),
 
-  // Again, a slightly customized unauthenticated route mixin that gives a flash message when you are redirected
+   /**
+   * Before the model is fetched, check whether the user is unauthenticated using ember-simple-auth
+   * @param  {String} transition - the attempted transition
+   * If the user is authenticated, redirect to the index route
+   */
   beforeModel(transition) {
     if (this.get('session').get('isAuthenticated')) {
       transition.abort();

@@ -2,20 +2,28 @@ import Ember from 'ember';
 import AuthValidations from '../mixins/auth-validations';
 
 export default Ember.Component.extend(AuthValidations, {
-  currentUser: Ember.inject.service('current-user'),
-
+  /** @type {Array} Bind the class to attributes */
   classNameBindings: [':set-small-width-and-center'],
 
-  // Default form values
-  firstNameValue: Ember.computed.oneWay('currentUser.firstName'),
-  lastNameValue: Ember.computed.oneWay('currentUser.lastName'),
-  emailValue: Ember.computed.oneWay('currentUser.email'),
-  mailingList: Ember.computed.oneWay('currentUser.mailingList'),
+  /** @type {String} The computed first name value, based off of the current user first name */
+  firstNameValue: Ember.computed.oneWay('current-user.firstName'),
+
+  /** @type {String} The computed last name value, based off of the current user first name */
+  lastNameValue: Ember.computed.oneWay('current-user.lastName'),
+
+  /** @type {String} The computed email value, based off of the current user first name */
+  emailValue: Ember.computed.oneWay('current-user.email'),
+
+  /** @type {Boolean} The computed mailing list value, based off of the current user first name */
+  mailingList: Ember.computed.oneWay('current-user.mailingList'),
 
   actions: {
-    // Use the current user service to update the user profile attributes
+    /**
+     * Update the current user with the form element attributes
+     * On success or fail, display a flash message
+     */
     userSettingsSubmit() {
-      this.get('currentUser').updateUserAttributes({
+      this.get('current-user').updateUserAttributes({
         firstName: this.get('firstNameValue'),
         lastName: this.get('lastNameValue'),
         email: this.get('emailValue'),
@@ -24,8 +32,8 @@ export default Ember.Component.extend(AuthValidations, {
       .then(() => {
         Ember.get(this, 'flashMessages').success('Successfully updated!');
       })
-      .catch((xhr) => {
-        Ember.get(this, 'flashMessages').danger('Uh oh, there was a problem updating');
+      .catch((err) => {
+        Ember.get(this, 'flashMessages').danger(err.errors.error);
       });
     }
   }

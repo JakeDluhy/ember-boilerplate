@@ -1,9 +1,16 @@
 import Ember from 'ember';
 
 export default Ember.Mixin.create({
-  // Form validations used on ember-paper forms
+  /**
+   * Form validations.
+   * Mixin with any component that has form elements to validate those elements
+   */
 
-  // Test whether the email is valid email format
+  /**
+   * Validate emails
+   * @type {Object}
+   * @returns {Booelan} true if the email is valid, false if it is not
+   */
   emailValidation: {
     'errorMessage': 'Please provide email in a valid format',
     'isError': (inputValue) => {
@@ -12,7 +19,12 @@ export default Ember.Mixin.create({
     }
   },
 
-  // Test whether the password length is 8 or more characters
+  /**
+   * Validate password
+   * @type {Object}
+   * @returns {Boolean} true if the password is more than 8 characters,
+   *                    flase if it is less
+   */
   passwordValidation: {
     'errorMessage': 'Password must be 8 or more characters',
     'isError': (inputValue) => {
