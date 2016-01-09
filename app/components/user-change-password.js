@@ -29,6 +29,29 @@ export default Ember.Component.extend(AuthValidations, {
   confirmNewPasswordValue: '',
 
   /**
+   * Disable the submit button for the form
+   * @param  {String}    oldPasswordValue The value in the old password field
+   * @param  {String}    newPasswordValue The value in the new password field
+   * @param  {String}    confirmNewPasswordValue The value in the confirmation field
+   * @return {Boolean}   Should the submit button be disabled?
+   */
+  disableSubmit: Ember.computed('oldPasswordValue', 'newPasswordValue', 'confirmNewPasswordValue', function() {
+    let oldPasswordValue = this.get('oldPasswordValue');
+    let newPasswordValue = this.get('newPasswordValue');
+    let confirmNewPasswordValue = this.get('confirmNewPasswordValue');
+
+    // Check 1) Is the old password valid, or is it the password reset form?
+    //       2) Is the new password valid?
+    //       3) Is the password confirmation valid?
+    if(((oldPasswordValue && oldPasswordValue !== '' && !this.get('passwordValidation').isError(oldPasswordValue)) || this.get('passwordReset')) &&
+       newPasswordValue && newPasswordValue !== '' && !this.get('passwordValidation').isError(newPasswordValue) &&
+       confirmNewPasswordValue && confirmNewPasswordValue !== '' && !this.get('passwordValidation').isError(confirmNewPasswordValue)) {
+      return false;
+    }
+    return true;
+  }),
+
+  /**
    * Check whether the password and password confirmation values are equal
    * @return {Boolean} Are the two new passwords the same?
    */
@@ -47,8 +70,8 @@ export default Ember.Component.extend(AuthValidations, {
     .then(() => {
       Ember.get(this, 'flashMessages').success('Password successfully updated');
       self.sendAction('transition', 'index');
-    }).
-    catch((err) => {
+    })
+    .catch((err) => {
       Ember.get(this, 'flashMessages').danger(err.errors.error);
     });
   },

@@ -19,7 +19,7 @@ export default Ember.Service.extend({
   },
 
   /** Set the jwt key to storage */
-  setJwtKey(jwtToken) {
+  updateJwtKey(jwtToken) {
     if(localStorage.getItem('jwtKey')) {
       localStorage.setItem('jwtKey', jwtToken);
     } else {
@@ -36,20 +36,21 @@ export default Ember.Service.extend({
     let self = this;
     let jwtKey = this.getJwtKey();
 
-    Ember.$.ajax({
-      type: 'GET',
-      url: '/api/users/current_user',
-      headers: {
-        'AUTHORIZATION': `Bearer ${jwtKey}`
-      }
-    })
-    .done((response) => {
-      console.log(response);
-      self.setProperties(response.data.attributes);
-    })
-    .fail((xhr) => {
-      console.log(xhr);
-    });
+    if(jwtKey && jwtKey !== 'undefined') {
+      Ember.$.ajax({
+        type: 'GET',
+        url: '/api/users/current_user',
+        headers: {
+          'AUTHORIZATION': `Bearer ${jwtKey}`
+        }
+      })
+      .done((response) => {
+        self.setProperties(response.data.attributes);
+      })
+      .fail((xhr) => {
+        console.log(xhr);
+      });
+    }
   },
 
   /**
@@ -79,7 +80,7 @@ export default Ember.Service.extend({
       })
       .done((data) => {
         self.setProperties(attributeHash);
-        self.setJwtKey(data.meta.token);
+        self.updateJwtKey(data.meta.token);
         resolve();
       })
       .fail((xhr) => {
@@ -112,12 +113,12 @@ export default Ember.Service.extend({
         }
       })
       .done((data) => {
-        self.setJwtKey(data.meta.token);
+        self.updateJwtKey(data.meta.token);
         resolve();
       })
       .fail((xhr) => {
         reject(JSON.parse(xhr.responseText));
-      })
+      });
     });
   }
 });

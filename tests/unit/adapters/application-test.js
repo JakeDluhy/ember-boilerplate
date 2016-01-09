@@ -4,6 +4,9 @@ import {
   describeModule,
   it
 } from 'ember-mocha';
+import { describe, beforeEach } from 'mocha';
+
+const jwtValue = 'jwtKeyValue';
 
 describeModule(
   'adapter:application',
@@ -17,6 +20,23 @@ describeModule(
     it('exists', function() {
       var adapter = this.subject();
       expect(adapter).to.be.ok;
+    });
+
+    describe('setting the headers', function() {
+      it('works with local storage', function() {
+        localStorage.getItem = function() { return jwtValue; };
+
+        let adapter = this.subject();
+        expect(adapter.get('headers')['AUTHORIZATION']).to.equal(`Bearer ${jwtValue}`);
+      });
+
+      it('works with session storage', function() {
+        localStorage.getItem = function() { return undefined; };
+        sessionStorage.getItem = function() { return jwtValue; };
+
+        let adapter = this.subject();
+        expect(adapter.get('headers')['AUTHORIZATION']).to.equal(`Bearer ${jwtValue}`);
+      });
     });
   }
 );

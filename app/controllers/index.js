@@ -17,34 +17,12 @@ export default Ember.Controller.extend({
       
     },
 
-    // TODO: move to route
     /**
      * Submit the email to the mailing list
      * On success or failure, display a flash message
      */
     submitToMailingList() {
-      var self = this;
-
-      Ember.$.ajax({
-        type: 'POST',
-        url: '/api/mailing_list',
-        data: {
-          data: {
-            type: 'user',
-            id: null,
-            attributes: {
-              email: self.get('mailingListEmail')
-            }
-          }
-        }
-      })
-      .done((data) => {
-        Ember.get(self, 'flashMessages').success(data.meta.success);
-      })
-      .fail((xhr) => {
-        var response = JSON.parse(xhr.responseText);
-        Ember.get(self, 'flashMessages').danger(response.errors.error);
-      });
+      this.send('persistMailingListSignup', this.get('mailingListEmail'));
     },
 
     /** Open the contact modal */

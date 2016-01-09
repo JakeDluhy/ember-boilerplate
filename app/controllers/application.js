@@ -19,11 +19,6 @@ export default Ember.Controller.extend({
   showLogin: true,
 
   actions: {
-    /** Transition to the provided route */
-    transitionTo(route) {
-      this.transitionToRoute(route);
-    },
-
     /** Open the side navigation for mobile */
     openSidenav(toggle) {
       toggle.send('toggleMenu');

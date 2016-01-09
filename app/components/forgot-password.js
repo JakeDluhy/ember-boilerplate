@@ -8,6 +8,19 @@ export default Ember.Component.extend(AuthValidations, {
   /** @type {String} The value of the email entry */
   emailValue: '',
 
+  /**
+   * Disable the submit button for the form
+   * @param  {String} )  emailValue The value in the email field
+   * @return {Boolean}   Should the submit button be disabled?
+   */
+  disableSubmit: Ember.computed('emailValue', function() {
+    let emailValue = this.get('emailValue');
+    if(emailValue && emailValue !== '' && !this.get('emailValidation').isError(emailValue)) {
+      return false;
+    }
+    return true;
+  }),
+
   actions: {
     /**
      * Submit the form through an ajax request

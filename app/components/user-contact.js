@@ -24,6 +24,44 @@ export default Ember.Component.extend(AuthValidations, {
   /** @type {String} The text of the request */
   commentValue: '',
 
+  /**
+   * Disable the submit button for the form
+   * @param  {String}    oldPasswordValue The value in the old password field
+   * @param  {String}    newPasswordValue The value in the new password field
+   * @param  {String}    confirmNewPasswordValue The value in the confirmation field
+   * @return {Boolean}   Should the submit button be disabled?
+   */
+  disableSubmit: Ember.computed('emailValue', 'commentValue', function() {
+    let emailValue = this.get('emailValue');
+    let commentValue = this.get('commentValue');
+
+    // Check 1) Is the email valid?
+    //       2) Is the comment valid?
+    if(emailValue && emailValue !== '' && !this.get('emailValidation').isError(emailValue) &&
+       commentValue && commentValue !== '') {
+      return false;
+    }
+    return true;
+  }),
+
+  sendRequest(attributes) {
+    var promise;
+    Ember.run(function() {
+      promise = Ember.$.ajax({
+        type: 'POST',
+        url: '/api/contact',
+        data: {
+          data: {
+            type: 'contact',
+            id: null,
+            attributes: attributes
+          }
+        }
+      });
+    });
+    return promise
+  },
+
   actions: {
     /**
      * Send the form to the contact api endpoint
@@ -31,32 +69,19 @@ export default Ember.Component.extend(AuthValidations, {
      * On failure, display the error message and trigger the submit failure action
      */
     formSubmit() {
-      var self = this;
-
-      Ember.$.ajax({
-        type: 'POST',
-        url: '/api/contact',
-        data: {
-          data: {
-            type: 'contact',
-            id: null,
-            attributes: {
-              contactType: self.get('selectedContactType'),
-              name: self.get('nameValue'),
-              fromEmail: self.get('emailValue'),
-              content: self.get('commentValue')
-            }
-          }
-        }
+      this.sendRequest({
+        contactType: this.get('selectedContactType'),
+        name: this.get('nameValue'),
+        fromEmail: this.get('emailValue'),
+        content: this.get('commentValue')
       })
       .done((data) => {
-        Ember.get(self, 'flashMessages').success(data.meta.success);
+        Ember.get(this, 'flashMessages').success(data.meta.success);
         this.sendAction('submitSuccess', 'index');
       })
       .fail((xhr) => {
         var response = JSON.parse(xhr.responseText);
-        Ember.get(self, 'flashMessages').danger(response.errors.error);
-        this.sendAction('submitFailure');
+        Ember.get(this, 'flashMessages').danger(response.errors.error);
       });
     }
   }

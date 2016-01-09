@@ -17,6 +17,20 @@ export default Ember.Component.extend(AuthValidations, {
   /** @type {Boolean} The computed mailing list value, based off of the current user first name */
   mailingList: Ember.computed.oneWay('current-user.mailingList'),
 
+  /**
+   * Disable the submit button for the form
+   * @param  {String}    emailValue The value in the email field
+   * @return {Boolean}   Should the submit button be disabled?
+   */
+  disableSubmit: Ember.computed('emailValue', function() {
+    let emailValue = this.get('emailValue');
+
+    if(emailValue && emailValue !== '' && !this.get('emailValidation').isError(emailValue)) {
+      return false;
+    }
+    return true;
+  }),
+
   actions: {
     /**
      * Update the current user with the form element attributes

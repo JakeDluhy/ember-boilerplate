@@ -4,7 +4,7 @@ import TransitionHandlers from '../../mixins/transition-handlers';
 export default Ember.Route.extend(TransitionHandlers, {
   model(params) {
     // Set resetCode to the url param
-    this.set('resetCode', params.resetCode)
+    this.set('resetCode', params.resetCode);
   },
 
   actions: {

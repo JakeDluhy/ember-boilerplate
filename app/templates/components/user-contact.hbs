@@ -1,4 +1,4 @@
-{{#paper-select placeholder="What do you want to talk about?" model=selectedContactType}}
+{{#paper-select placeholder="What do you want to talk about?" model=selectedContactType class='spec-contact-type-select'}}
   {{#each contactTypes as |contactType|}}
     {{#paper-option value=contactType}}
       {{contactType}}
@@ -6,7 +6,7 @@
   {{/each}}
 {{/paper-select}}
 
-{{paper-input label="Name" value=nameValue}}
-{{paper-input label="Email" value=emailValue required=true customValidation=emailValidation}}
-{{paper-input label="Comment" textarea=true value=commentValue required=true}}
-{{#paper-button raised=true primary=true action="formSubmit" class="float-right"}}Submit{{/paper-button}}
+{{paper-input label="Name" value=nameValue class="spec-name-value"}}
+{{paper-input label="Email" value=emailValue required=true customValidation=emailValidation class='spec-email-value'}}
+{{paper-input label="Comment" textarea=true value=commentValue required=true class='spec-comment-value'}}
+{{#paper-button raised=true primary=true action="formSubmit" disabled=disableSubmit class="float-right spec-user-contact-submit"}}Submit{{/paper-button}}

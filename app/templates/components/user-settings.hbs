@@ -1,9 +1,9 @@
-{{paper-input label="First Name" value=firstNameValue}}
-{{paper-input label="Last Name" value=lastNameValue}}
-{{paper-input label="Email" type="email" value=emailValue required=true customValidation=emailValidation}}
+{{paper-input label="First Name" value=firstNameValue class="spec-first-name"}}
+{{paper-input label="Last Name" value=lastNameValue class="spec-last-name"}}
+{{paper-input label="Email" type="email" value=emailValue required=true customValidation=emailValidation class="spec-email"}}
 <div class="bottom-container">
   <div class="float-left">
-    {{#paper-checkbox checked=mailingList class="no-margin-left"}}Mailing list signup{{/paper-checkbox}}
+    {{#paper-checkbox checked=mailingList class="no-margin-left spec-mailing-list"}}Mailing list signup{{/paper-checkbox}}
   </div>
-  {{#paper-button raised=true primary=true action="userSettingsSubmit" class="float-right" }}Update{{/paper-button}}
+  {{#paper-button raised=true primary=true action="userSettingsSubmit" disabled=disableSubmit class="float-right spec-user-settings-submit" }}Update{{/paper-button}}
 </div>

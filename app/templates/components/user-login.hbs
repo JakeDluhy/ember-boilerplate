@@ -2,15 +2,15 @@
 {{paper-input label="Password" type="password" value=passwordValue required=true customValidation=passwordValidation}}
 <div class="bottom-container">
   <div class="float-left">
-    {{#paper-checkbox checked=rememberMe class="no-margin-left"}}Remember Me{{/paper-checkbox}}
+    {{#paper-checkbox checked=rememberMe class="no-margin-left spec-remember-me-checkbox"}}Remember Me{{/paper-checkbox}}
     {{#link-to 'users.forgot' class="forgot-link"}}Forgot your password?{{/link-to}}
   </div>
-  {{#paper-button raised=true primary=true action="loginSubmit" class="float-right" }}Log In{{/paper-button}}
+  {{#paper-button raised=true primary=true action="loginSubmit" disabled=disableSubmit class="float-right spec-user-login-submit" }}Log In{{/paper-button}}
 </div>
 <h5 class="center-text">No account? 
 {{#if transitionToRoute}}
-  {{#link-to 'users.register'}}Register{{/link-to}}
+  {{#link-to 'users.register' class="spec-users-register"}}Register{{/link-to}}
 {{else}}
-  <a href="#" {{action 'transitionToReg'}}>Register</a>
+  <a href="#" {{action 'transitionToReg'}} class="spec-transition-to-reg">Register</a>
 {{/if}}
 </h5>

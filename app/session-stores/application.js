@@ -32,11 +32,12 @@ export default Base.extend({
   persist(data) {
     let stringData = JSON.stringify(data || {});
 
-    console.log(data);
     // Because our current user service requires the jwtKey in localStorage, we have to set it twice
     if(data.authenticated.rememberMe) {
       localStorage.setItem(this.key, stringData);
       localStorage.setItem(this.jwtKey, data.authenticated.token);
+      sessionStorage.removeItem(this.key);
+      sessionStorage.removeItem(this.jwtKey);
     } else {
       localStorage.removeItem(this.key);
       localStorage.removeItem(this.jwtKey);

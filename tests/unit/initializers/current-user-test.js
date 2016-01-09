@@ -21,7 +21,7 @@ describe('CurrentUserInitializer', function() {
 
   // Replace this with your real tests.
   it('works', function() {
-    initialize(container, application);
+    initialize(application);
 
     // you would normally confirm the results of the initializer here
     expect(true).to.be.ok;

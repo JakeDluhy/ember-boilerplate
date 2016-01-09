@@ -1,8 +1,11 @@
 {
   "predef": [
+    "server",
     "document",
     "window",
-    "-Promise"
+    "-Promise",
+    "localStorage",
+    "sessionStorage"
   ],
   "browser": true,
   "boss": true,
@@ -28,5 +31,5 @@
   "white": false,
   "eqnull": true,
   "esnext": true,
-  "unused": true
+  "unused": false
 }

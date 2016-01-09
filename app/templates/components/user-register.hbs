@@ -4,14 +4,14 @@
 {{paper-input label="Password" type="password" value=passwordValue required=true customValidation=passwordValidation}}
 <div class="bottom-container">
   <div class="float-left">
-    {{#paper-checkbox checked=mailingList class="no-margin-left"}}Sign up for our mailing list!{{/paper-checkbox}}
+    {{#paper-checkbox checked=mailingList class="no-margin-left spec-mailing-list-checkbox"}}Sign up for our mailing list!{{/paper-checkbox}}
   </div>
-  {{#paper-button raised=true primary=true action="registerSubmit" class="float-right" }}Register{{/paper-button}}
+  {{#paper-button raised=true primary=true action="registerSubmit" disabled=disableSubmit class="float-right spec-user-register-submit" }}Register{{/paper-button}}
 </div>
 <h5 class="center-text">Already registered? 
 {{#if transitionToRoute}}
-  {{#link-to 'users.login'}}Log In{{/link-to}}
+  {{#link-to 'users.login' class='spec-users-login'}}Log In{{/link-to}}
 {{else}}
-  <a href="#" {{action 'transitionToLogin'}}>Log In</a>
+  <a href="#" {{action 'transitionToLogin'}} class="spec-transition-to-login">Log In</a>
 {{/if}}
 </h5>

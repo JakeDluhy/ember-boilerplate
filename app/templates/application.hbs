@@ -52,7 +52,7 @@
     {{/paper-toolbar}}
     {{#each flashMessages.queue as |flash|}}
       {{#custom-flash flash=flash}}
-          {{flash.message}}
+        {{flash.message}}
       {{/custom-flash}}
     {{/each}}
   </div>
@@ -60,7 +60,7 @@
   {{#paper-sidenav class="md-sidenav-left md-whiteframe-z2" locked-open=""}}
     {{#paper-content}}
       {{#paper-list}}
-        {{#paper-item action="transitionTo" param="index"}}Home{{/paper-item}}
+        {{#paper-item action="transition" param="index"}}Home{{/paper-item}}
         {{#if session.isAuthenticated}}
           {{#paper-item action="logoutUser"}}Log out{{/paper-item}}
         {{/if}}
@@ -70,7 +70,11 @@
 {{/paper-nav-container}}
 
 {{#modal-dialog modalTitle='Log In' isOpen=loginModalOpen}}
-  {{user-login onSubmitSuccess='closeLoginModal'}}
+  {{#if showLogin}}
+    {{user-login transitionToRoute=false onSubmitSuccess='closeLoginModal' transitionToReg=(action 'loginModalTransition')}}
+  {{else}}
+    {{user-register transitionToRoute=false transitionToLogin=(action 'loginModalTransition')}}
+  {{/if}}
 {{/modal-dialog}}
 
 {{outlet}}

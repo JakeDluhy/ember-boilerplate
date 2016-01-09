@@ -12,3 +12,7 @@ body {
     overflow: auto;
   }
 }
+
+body > .md-select-menu-container {
+  overflow: visible;
+}

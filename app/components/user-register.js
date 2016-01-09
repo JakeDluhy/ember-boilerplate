@@ -36,45 +36,69 @@ export default Ember.Component.extend(AuthValidations, {
    */
   transitionToRoute: true,
 
-  actions: {
-    /**
-     * Submit the form data to the server to register the user
-     * It pulls form data from the component attributes, and POSTS it to the server
-     * On success - Display the success message, and transition to the index
-     * On error - Display the error message
-     */
-    registerSubmit() {
-      var self = this;
+  /**
+   * Disable the submit button for the form
+   * @param  {String}    emailValue The value in the email field
+   * @param  {String}    passwordValue The value in the password field
+   * @return {Boolean}   Should the submit button be disabled?
+   */
+  disableSubmit: Ember.computed('emailValue', 'passwordValue', function() {
+    let emailValue = this.get('emailValue');
+    let passwordValue = this.get('passwordValue');
 
-      var userData = {
-        firstName: this.get('firstNameValue'),
-        lastName: this.get('lastNameValue'),
-        email: this.get('emailValue'),
-        password: this.get('passwordValue'),
-        mailingList: this.get('mailingList')
-      };
+    // Check 1) Is the email valid?
+    //       2) Is the password valid?
+    if(emailValue && emailValue !== '' && !this.get('emailValidation').isError(emailValue) &&
+       passwordValue && passwordValue !== '' && !this.get('passwordValidation').isError(passwordValue)) {
+      return false;
+    }
+    return true;
+  }),
 
-      Ember.$.ajax({
-        type: 'POST',
-        url: '/api/register',
+  /**
+   * Submit the form data to the server to register the user
+   * It pulls form data from the component attributes, and POSTS it to the server
+   * On success - Display the success message, and transition to the index
+   * On error - Display the error message
+   */
+  persistRegistration() {
+    var self = this;
+
+    var userData = {
+      firstName: this.get('firstNameValue'),
+      lastName: this.get('lastNameValue'),
+      email: this.get('emailValue'),
+      password: this.get('passwordValue'),
+      mailingList: this.get('mailingList')
+    };
+
+    Ember.$.ajax({
+      type: 'POST',
+      url: '/api/register',
+      data: {
         data: {
-          data: {
-            type: 'user',
-            id: null,
-            attributes: userData
-          }
+          type: 'user',
+          id: null,
+          attributes: userData
         }
-      })
-      .done((data) => {
-        Ember.get(self, 'flashMessages').success(data.meta.success, {
-          sticky: true
-        });  
-        self.sendAction('onSubmitSuccess', 'index');
-      })
-      .fail((xhr) => {
-        var err = JSON.parse(xhr.responseText);
-        Ember.get(self, 'flashMessages').danger(err.errors.error);
-      });
+      }
+    })
+    .done((data) => {
+      Ember.get(self, 'flashMessages').success(data.meta.success, {
+        sticky: true
+      });  
+      self.sendAction('onSubmitSuccess', 'index');
+    })
+    .fail((xhr) => {
+      var err = JSON.parse(xhr.responseText);
+      Ember.get(self, 'flashMessages').danger(err.errors.error);
+    });
+  },
+
+  actions: {
+    /** Call to persist the registration request */
+    registerSubmit() {
+      this.persistRegistration();
     },
 
     /** Clicking on the switch link will transition the view to login (if modal) */

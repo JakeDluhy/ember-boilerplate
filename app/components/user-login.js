@@ -33,6 +33,25 @@ export default Ember.Component.extend(AuthValidations, {
    */
   transitionToRoute: true,
 
+  /**
+   * Disable the submit button for the form
+   * @param  {String}    emailValue The value in the email field
+   * @param  {String}    passwordValue The value in the password field
+   * @return {Boolean}   Should the submit button be disabled?
+   */
+  disableSubmit: Ember.computed('emailValue', 'passwordValue', function() {
+    let emailValue = this.get('emailValue');
+    let passwordValue = this.get('passwordValue');
+
+    // Check 1) Is the email valid?
+    //       2) Is the password valid?
+    if(emailValue && emailValue !== '' && !this.get('emailValidation').isError(emailValue) &&
+       passwordValue && passwordValue !== '' && !this.get('passwordValidation').isError(passwordValue)) {
+      return false;
+    }
+    return true;
+  }),
+
   actions: {
     /**
      * Log In using ember-simple-auth, with the form data

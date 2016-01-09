@@ -54,7 +54,7 @@ export default Ember.Component.extend({
    * @param  {object} ev - The jquery event on click
    */
   click(ev) {
-    var eventTarget = $(ev.target);
+    var eventTarget = Ember.$(ev.target);
     if(this.get('clickOutsideToClose') && (eventTarget.hasClass('modal-overlay') || eventTarget.hasClass('modal-wrapper'))) {
       this.set('isOpen', false);
     }

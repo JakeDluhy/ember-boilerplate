@@ -82,6 +82,8 @@ export default Component.extend({
   * The default duration is 3500 ms, meaning that after it slides up the message is then destroyed
   */
   _setActive: on('didInsertElement', function() {
+    let timeout = this.get('flash.timeout') - 500;
+
     run.scheduleOnce('afterRender', this, () => {
       run.debounce(this, () => {
         set(this, 'active', true);
@@ -89,7 +91,7 @@ export default Component.extend({
       if(!this.get('flash.sticky')) {
         run.debounce(this, () => {
           if(this.get('active')) { set(this, 'active', false); }
-        }, 3000);
+        }, timeout);
       }
     });
   }),
@@ -104,7 +106,7 @@ export default Component.extend({
   },
 
   /**
-   * Restroy the component and call to destroy the flash message
+   * Destroy the component and call to destroy the flash message
    */
   willDestroy() {
     this._super();

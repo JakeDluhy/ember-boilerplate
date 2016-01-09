@@ -44,7 +44,6 @@ export default Base.extend({
         }
       })
       .done((response) => {
-        console.log(response);
         self.get('currentUser').setProperties(response.meta.user);
         run(null, resolve, Ember.merge(response.meta, {rememberMe: options.rememberMe}));
       })
@@ -64,4 +63,4 @@ export default Base.extend({
       resolve();
     });
   }
-})
+});
