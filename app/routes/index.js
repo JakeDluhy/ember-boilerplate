@@ -7,7 +7,8 @@ export default Ember.Route.extend({
      * @param  {String} email - The email to sign up for the list
      */
     persistMailingListSignup(email) {
-      let self = this;
+      let flashMessages = Ember.get(this, 'flashMessages');
+
       
       Ember.$.ajax({
         type: 'POST',
@@ -23,11 +24,15 @@ export default Ember.Route.extend({
         }
       })
       .done((data) => {
-        Ember.get(self, 'flashMessages').success(data.meta.success);
+        Ember.run(function() {
+          flashMessages.success(data.meta.success);
+        });
       })
       .fail((xhr) => {
         var response = JSON.parse(xhr.responseText);
-        Ember.get(self, 'flashMessages').danger(response.errors.error);
+        Ember.run(function() {
+          flashMessages.danger(response.errors.error);
+        });
       });
     }
   }

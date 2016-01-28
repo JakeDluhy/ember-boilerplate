@@ -1,6 +1,7 @@
 import Ember from 'ember';
+import authValidations from '../mixins/auth-validations';
 
-export default Ember.Controller.extend({
+export default Ember.Controller.extend(authValidations, {
   /** @type {String} The value of the email for a user trying to join the mailing list */
   mailingListEmail: '',
 
@@ -11,10 +12,20 @@ export default Ember.Controller.extend({
    */
   contactModalOpen: false,
 
+  disableSubmit: Ember.computed('mailingListEmail', function() {
+    let emailValue = this.get('mailingListEmail');
+
+    // Check 1) Is the email valid?
+    if(emailValue && emailValue !== '' && !this.get('emailValidation').isError(emailValue)) {
+      return false;
+    }
+    return true;
+  }),
+
   actions: {
     /** Act on the call to action button */
     callToAction() {
-      
+      Ember.get(this, 'flashMessages').success('Hello');
     },
 
     /**
@@ -22,6 +33,8 @@ export default Ember.Controller.extend({
      * On success or failure, display a flash message
      */
     submitToMailingList() {
+      if(this.get('disableSubmit')) { return; }
+      
       this.send('persistMailingListSignup', this.get('mailingListEmail'));
     },
 

@@ -44,7 +44,10 @@ export default Base.extend({
         }
       })
       .done((response) => {
-        self.get('currentUser').setProperties(response.meta.user);
+        run(function() {
+          self.get('currentUser').setProperties(response.meta.user);
+          self.get('currentUser').setupAjaxHeaders(response.meta.token);
+        });
         run(null, resolve, Ember.merge(response.meta, {rememberMe: options.rememberMe}));
       })
       .fail((xhr) => {

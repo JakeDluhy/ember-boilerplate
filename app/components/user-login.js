@@ -59,7 +59,10 @@ export default Ember.Component.extend(AuthValidations, {
      * On failure, disaply an error message
      */
     loginSubmit() {
+      if(this.get('disableSubmit')) { return; }
+      
       var self = this;
+      let flashMessages = Ember.get(this, 'flashMessages');
 
       this.get('session').authenticate('authenticator:basic', {
         email: this.get('emailValue'),
@@ -67,11 +70,15 @@ export default Ember.Component.extend(AuthValidations, {
         rememberMe: this.get('rememberMe')
       })
       .then((data) => {
-        Ember.get(this, 'flashMessages').success('Welcome back!');
-        self.sendAction('onSubmitSuccess');
+        Ember.run(function() {
+          flashMessages.success('Welcome back!');
+        });
+        self.sendAction('onSubmitSuccess', 'index');
       })
       .catch((err) => {
-        Ember.get(this, 'flashMessages').danger(`Unable to login: ${err.errors.error}`);
+        Ember.run(function() {
+          flashMessages.danger(`Unable to login: ${err.errors.error}`);
+        });
       });
     },
 

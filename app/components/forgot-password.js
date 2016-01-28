@@ -28,28 +28,10 @@ export default Ember.Component.extend(AuthValidations, {
      * @redirects to the index after a successful request
      */
     forgotSubmit() {
-      var self = this;
-
-      Ember.$.ajax({
-        type: 'POST',
-        url: '/api/recover_password',
-        data: {
-          data: {
-            type: 'user',
-            id: null,
-            attributes: {
-              email: self.get('emailValue')
-            }
-          }
-        }
-      })
-      .done((data) => {
-        Ember.get(self, 'flashMessages').success(data.meta.success);
-        this.sendAction('onSubmitSuccess', 'index');
-      })
-      .fail((xhr) => {
-        var response = JSON.parse(xhr.responseText);
-        Ember.get(self, 'flashMessages').danger(response.errors.error);
+      if(this.get('disableSubmit')) { return; }
+      
+      this.sendAction('submitForgotPassword', {
+        email: this.get('emailValue')
       });
     }
   }

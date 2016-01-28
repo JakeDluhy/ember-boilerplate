@@ -5,7 +5,8 @@
     "window",
     "-Promise",
     "localStorage",
-    "sessionStorage"
+    "sessionStorage",
+    "ga"
   ],
   "browser": true,
   "boss": true,

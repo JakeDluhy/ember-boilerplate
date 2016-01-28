@@ -7,75 +7,16 @@
  */
 
 import Ember from 'ember';
-import computed from 'ember-new-computed';
+import FlashMessage from 'ember-cli-flash/components/flash-message';
 
 const {
-  String: { classify, htmlSafe },
-  Component,
-  getWithDefault,
-  warn,
   run,
   on,
-  get,
-  set,
+  set
 } = Ember;
-const {
-  readOnly,
-  bool
-} = computed;
 
-export default Component.extend({
-  /** @type {Array} The class name bindings for the component */
-  classNameBindings: ['alertType', 'active', 'exiting'],
-
-  /** @type {Boolean} Is the flash message currently active? */
-  active: false,
-
-  /** @type {Boolean} Is the flash message exiting at this moment */
-  exiting: readOnly('flash.exiting'),
-
- /**
-  * alertType is the type of alert
-  * It is styled with different colors depending on the alert
-  * @param  {Computed} flash.type - the type of flash
-  * @return {String}
-  */
-  alertType: computed('flash.type', {
-    get() {
-      const flashType = getWithDefault(this, 'flash.type', '');
-      const messageStyle = getWithDefault(this, 'messageStyle', '');
-      let prefix = 'alert alert-';
-
-      return `${prefix}${flashType}`;
-    },
-
-    set() {
-      warn('`alertType` is read only');
-
-      return this;
-    }
-  }),
-
+export default FlashMessage.extend({
   /**
-   * Alias for flash.type
-   * @param  {Computed} flash.type - the type of flash
-   * @return {String}
-   */
-  flashType: computed('flash.type', {
-    get() {
-      const flashType = getWithDefault(this, 'flash.type', '');
-
-      return classify(flashType);
-    },
-
-    set() {
-      warn('`flashType` is read only');
-
-      return this;
-    }
-  }),
-
- /**
   * The custom part I implemented.
   * After render, it waits 50 ms and then sets active true, resulting in a css animation to slide the flash message down.
   * After 3s, it sets active false, sliding the flash message back up
@@ -104,26 +45,4 @@ export default Component.extend({
     set(this, 'active', false);
     run.debounce(this, this._destroyFlashMessage, 500);
   },
-
-  /**
-   * Destroy the component and call to destroy the flash message
-   */
-  willDestroy() {
-    this._super();
-    this._destroyFlashMessage();
-  },
-
-  /**
-   * Destroy the flash message from the queue
-   * @private
-   */
-  _destroyFlashMessage() {
-    const flash = getWithDefault(this, 'flash', false);
-
-    if (flash) {
-      flash.destroyMessage();
-    }
-  },
-
-  hasBlock: bool('template').readOnly()
 });

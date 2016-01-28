@@ -13,9 +13,9 @@ const jwtKeyValue = 'fakeJwtKey';
 const userId = 1;
 
 /** Stub out the request to localstorage for init */
-var stubbedLocalStorageRequest = function() {
+function stubbedLocalStorageRequest() {
   return jwtKeyValue;
-};
+}
 
 describeModule(
   'service:current-user',
@@ -36,7 +36,6 @@ describeModule(
       // Stub out the ajax request
       Ember.$.ajax = function(request) {
         expect(request.url).to.equal('/api/users/current_user');
-        expect(request.headers['AUTHORIZATION']).to.equal(`Bearer ${jwtKeyValue}`);
 
         return {
           done: function(data) {
@@ -49,6 +48,14 @@ describeModule(
       expect(service).to.be.ok;
 
       sinon.assert.calledOnce(spy);
+    });
+
+    it('sets up ajax headers', function() {
+      Ember.$.ajaxSetup = function(data) {
+        expect(data.headers.AUTHORIZATION).to.equal(`Bearer ${jwtKeyValue}`);
+      };
+
+      this.subject().setupAjaxHeaders(jwtKeyValue);
     });
 
     describe('after init', function() {
@@ -145,7 +152,6 @@ describeModule(
 
           Ember.$.ajax = function(request) {
             expect(request.url).to.equal(`/api/users/${userId}`);
-            expect(request.headers['AUTHORIZATION']).to.equal(`Bearer ${jwtKeyValue}`);
             expect(request.data.data.type).to.equal('user');
             expect(request.data.data.id).to.equal(userId);
             expect(request.data.data.attributes).to.equal(attributeHash);
@@ -174,7 +180,6 @@ describeModule(
           Ember.$.ajax = function(request) {
             expect(request.type).to.equal('PUT');
             expect(request.url).to.equal(`/api/users/${userId}/change_password`);
-            expect(request.headers['AUTHORIZATION']).to.equal(`Bearer ${jwtKeyValue}`);
             expect(request.data.data.type).to.equal('user');
             expect(request.data.data.id).to.equal(userId);
             expect(request.data.data.attributes).to.equal(attributeHash);

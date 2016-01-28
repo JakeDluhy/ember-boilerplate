@@ -27,4 +27,20 @@ describe('Acceptance: UsersForgot', function() {
       expect(currentPath()).to.equal('users.forgot');
     });
   });
+
+  describe('interacting with the page', function() {
+    beforeEach(function() {
+      visit('/users/forgot');
+    });
+
+    it('can fill in and submit the form', function() {
+      fillIn('.spec-forgot-email-input input', 'foo.bar@example.com');
+      click('.spec-forgot-submit-button');
+
+      andThen(() => {
+        expect(currentPath()).to.equal('index');
+        expect($('.flash-content')).to.have.length(1);
+      });
+    });
+  });
 });

@@ -27,4 +27,21 @@ describe('Acceptance: UsersReset', function() {
       expect(currentPath()).to.equal('users.reset');
     });
   });
+
+  describe('interacting with the page', function() {
+    beforeEach(function() {
+      visit('/users/reset/123abc');
+    });
+
+    it('can fill in and submit the form', function() {
+      fillIn('.spec-new-password input', 'foobarchoo');
+      fillIn('.spec-confirm-password input', 'foobarchoo');
+      click('.spec-change-password-submit');
+
+      andThen(() => {
+        expect(currentPath()).to.equal('index');
+        expect($('.flash-content')).to.have.length(1);
+      });
+    });
+  });
 });

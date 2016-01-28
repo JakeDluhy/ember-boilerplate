@@ -45,7 +45,7 @@ describeModule(
         };
       };
 
-      this.route.get('actions').resetPassword(newPassword);
+      this.route.get('actions').submitResetPassword(newPassword);
 
       sinon.assert.calledOnce(spy);
     });

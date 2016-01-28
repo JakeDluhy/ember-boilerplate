@@ -12,8 +12,9 @@ export default Ember.Route.extend(TransitionHandlers, {
      * Send the request with the new password and the reset code value
      * @param  {String} newPassword - the new password to send with the request
      */
-    resetPassword(newPassword) {
+    submitResetPassword(newPassword) {
       let self = this;
+      let flashMessages = Ember.get(this, 'flashMessages');
 
       Ember.$.ajax({
         type: 'PUT',
@@ -30,12 +31,16 @@ export default Ember.Route.extend(TransitionHandlers, {
         }
       })
       .done(() => {
-        Ember.get(this, 'flashMessages').success('Password successfully reset. Log in and try it out!');
+        Ember.run(function() {
+          flashMessages.success('Password successfully reset. Log in and try it out!');
+        });
         self.send('transition', 'index');
       })
       .fail((xhr) => {
         let err = JSON.parse(xhr.responseText);
-        Ember.get(this, 'flashMessages').danger(err.errors.error);
+        Ember.run(function() {
+          flashMessages.danger(err.errors.error);
+        });
       });
     }
   }

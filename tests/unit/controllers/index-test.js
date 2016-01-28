@@ -23,10 +23,26 @@ describeModule(
       expect(this.controller).to.be.ok;
     });
 
+    it('should not send the persist action if disableSubmit is true', function() {
+      let spy = sinon.spy();
+      this.controller.get('actions').get = function(val) {
+        if(val === 'disableSubmit') { return true; }
+      };
+
+      this.controller.get('actions').send = spy;
+
+      this.controller.get('actions').submitToMailingList();
+
+      sinon.assert.notCalled(spy);
+    });
+
     it('should send the persist action to the route when submitting to mailing list', function() {
       let spy = sinon.spy();
       let email = 'foo.bar@example.com';
-      this.controller.get('actions').get = function() { return email; };
+      this.controller.get('actions').get = function(val) {
+        if(val === 'disableSubmit') { return false; }
+        if(val === 'mailingListEmail') { return email; }
+      };
 
       this.controller.get('actions').send = spy;
 

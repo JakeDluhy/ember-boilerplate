@@ -44,45 +44,24 @@ export default Ember.Component.extend(AuthValidations, {
     return true;
   }),
 
-  sendRequest(attributes) {
-    var promise;
-    Ember.run(function() {
-      promise = Ember.$.ajax({
-        type: 'POST',
-        url: '/api/contact',
-        data: {
-          data: {
-            type: 'contact',
-            id: null,
-            attributes: attributes
-          }
-        }
-      });
-    });
-    return promise
-  },
-
   actions: {
     /**
-     * Send the form to the contact api endpoint
-     * On success, display the success message and redirect to the index
-     * On failure, display the error message and trigger the submit failure action
+     * Send the attribute data to the route
+     * If a listener action is bound, send that
      */
     formSubmit() {
-      this.sendRequest({
+      if(this.get('disableSubmit')) { return; }
+      
+      this.sendAction('submitUserContact', {
         contactType: this.get('selectedContactType'),
         name: this.get('nameValue'),
         fromEmail: this.get('emailValue'),
         content: this.get('commentValue')
-      })
-      .done((data) => {
-        Ember.get(this, 'flashMessages').success(data.meta.success);
-        this.sendAction('submitSuccess', 'index');
-      })
-      .fail((xhr) => {
-        var response = JSON.parse(xhr.responseText);
-        Ember.get(this, 'flashMessages').danger(response.errors.error);
       });
+
+      if(this.attrs.onContactSubmit) {
+        this.attrs.onContactSubmit();
+      }
     }
   }
 });

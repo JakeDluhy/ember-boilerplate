@@ -55,50 +55,18 @@ export default Ember.Component.extend(AuthValidations, {
     return true;
   }),
 
-  /**
-   * Submit the form data to the server to register the user
-   * It pulls form data from the component attributes, and POSTS it to the server
-   * On success - Display the success message, and transition to the index
-   * On error - Display the error message
-   */
-  persistRegistration() {
-    var self = this;
-
-    var userData = {
-      firstName: this.get('firstNameValue'),
-      lastName: this.get('lastNameValue'),
-      email: this.get('emailValue'),
-      password: this.get('passwordValue'),
-      mailingList: this.get('mailingList')
-    };
-
-    Ember.$.ajax({
-      type: 'POST',
-      url: '/api/register',
-      data: {
-        data: {
-          type: 'user',
-          id: null,
-          attributes: userData
-        }
-      }
-    })
-    .done((data) => {
-      Ember.get(self, 'flashMessages').success(data.meta.success, {
-        sticky: true
-      });  
-      self.sendAction('onSubmitSuccess', 'index');
-    })
-    .fail((xhr) => {
-      var err = JSON.parse(xhr.responseText);
-      Ember.get(self, 'flashMessages').danger(err.errors.error);
-    });
-  },
-
   actions: {
-    /** Call to persist the registration request */
+    /** Call to submit the registration request with the form data */
     registerSubmit() {
-      this.persistRegistration();
+      if(this.get('disableSubmit')) { return; }
+      
+      this.sendAction('submitUserRegister', {
+        firstName: this.get('firstNameValue'),
+        lastName: this.get('lastNameValue'),
+        email: this.get('emailValue'),
+        password: this.get('passwordValue'),
+        mailingList: this.get('mailingList')
+      });
     },
 
     /** Clicking on the switch link will transition the view to login (if modal) */

@@ -37,25 +37,20 @@ describeComponent(
       expect($('.spec-forgot-submit-button').attr('disabled')).to.equal('disabled');
     });
 
-    it('submits the ajax when clicking submit', function() {
+    it('sends an action when clicking submit', function() {
       let spy = sinon.spy();
       let emailInput = 'foo.bar@example.com';
       this.set('emailVal', emailInput);
-      Ember.$.ajax = function(request) {
-        expect(request.type).to.equal('POST');
-        expect(request.url).to.equal('/api/recover_password');
-        expect(request.data.data.attributes.email).to.equal(emailInput);
+      this.set('submitForgotPassword', spy);
 
-        return {
-          done: function() {
-            return { fail: spy };
-          }
-        };
-      };
+      this.render(hbs`
+        {{forgot-password emailValue=emailVal submitForgotPassword=(action submitForgotPassword)}}
+      `);
 
       $('.spec-forgot-submit-button').click();
 
       sinon.assert.calledOnce(spy);
+      sinon.assert.calledWith(spy, { email: emailInput });
     });
   }
 );

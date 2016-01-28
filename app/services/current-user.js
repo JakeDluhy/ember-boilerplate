@@ -27,6 +27,16 @@ export default Ember.Service.extend({
     }
   },
 
+  setupAjaxHeaders(jwtKey) {
+    if(jwtKey && jwtKey !== 'undefined') {
+      Ember.$.ajaxSetup({
+        headers: {
+          'AUTHORIZATION': `Bearer ${jwtKey}`
+        }
+      });
+    }
+  },
+
   /**
    * On init, we want to get the jwtKey, and authenticate against the server
    * It should return data for the current user, which get set as properties
@@ -37,6 +47,8 @@ export default Ember.Service.extend({
     let jwtKey = this.getJwtKey();
 
     if(jwtKey && jwtKey !== 'undefined') {
+      this.setupAjaxHeaders(jwtKey);
+
       Ember.$.ajax({
         type: 'GET',
         url: '/api/users/current_user',
@@ -45,7 +57,9 @@ export default Ember.Service.extend({
         }
       })
       .done((response) => {
-        self.setProperties(response.data.attributes);
+        Ember.run(function() {
+          self.setProperties(response.data.attributes);
+        });
       })
       .fail((xhr) => {
         console.log(xhr);
@@ -79,8 +93,10 @@ export default Ember.Service.extend({
         }
       })
       .done((data) => {
-        self.setProperties(attributeHash);
-        self.updateJwtKey(data.meta.token);
+        Ember.run(function() {
+          self.setProperties(attributeHash);
+          self.updateJwtKey(data.meta.token);
+        });
         resolve();
       })
       .fail((xhr) => {
@@ -113,7 +129,9 @@ export default Ember.Service.extend({
         }
       })
       .done((data) => {
-        self.updateJwtKey(data.meta.token);
+        Ember.run(function() {
+          self.updateJwtKey(data.meta.token);
+        });
         resolve();
       })
       .fail((xhr) => {

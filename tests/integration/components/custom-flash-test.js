@@ -16,66 +16,75 @@ describeComponent(
   },
   function() {
     describe('testing lifecycle', function() {
-      // beforeEach(function() {
-      //   this.spy = sinon.spy();
-        
-      // });
-
-      // it('renders', function(done) {
-      //   expect(this.$()).to.have.length(1);
-
-      //   setTimeout(function() {
-      //     done();
-      //   }, 50);
-      // });
-
-      // it('destroys itself after the timeout', function(done) {
-      //   let spy = sinon.spy();
-      //   this.flash = {
-      //     message: 'my message',
-      //     type: 'success',
-      //     timeout: 600,
-      //     destroyMessage: this.spy
-      //   };
-      //   this.set('flash', this.flash);
-
-      //   this.render(hbs`
-      //     {{#custom-flash flash=flash}}
-      //       flash.message
-      //     {{/custom-flash}}
-      //   `);
-
-      //   setTimeout(function() {
-      //     sinon.assert.calledOnce(spy);
-      //     done();
-      //   }, 600);
-      // });
-    });
-
-    describe('testing interaction', function() {
-      beforeEach(function() {
-        this.spy = sinon.spy();
-        this.flash = {
-          message: 'my message',
-          type: 'success',
-          timeout: 3500,
-          destroyMessage: this.spy
-        };
-        this.set('flash', this.flash);
-
+      it('renders', function(done) {
         this.render(hbs`
-          {{#custom-flash flash=flash}}
-            flash.message
-          {{/custom-flash}}
+          {{custom-flash}}
         `);
+
+        expect(this.$()).to.have.length(1);
+
+        setTimeout(function() {
+          done();
+        }, 50);
       });
 
-      // it('destroys itself on click after 500 seconds', function(done) {
-      //   setTimeout(function() {
-      //     expect(this.$().hasClass('active')).to.be.true;
-      //     done();
-      //   }, 100);
-      // });
+      it('sets itself to inactive after the timeout', function(done) {
+        let self = this;
+        let flash = {
+          message: 'my message',
+          type: 'success',
+          timeout: 600,
+          destroyMessage: function() {}
+        };
+        this.set('flash', flash);
+        this.set('active', false);
+
+        this.render(hbs`
+          {{#custom-flash flash=flash active=active}}
+            {{flash.message}}
+          {{/custom-flash}}
+        `);
+
+        setTimeout(function() {
+          expect(self.get('active')).to.be.true;
+        }, 75);
+
+        setTimeout(function() {
+          expect(self.get('active')).to.be.false;
+          done();
+        }, 150);
+      });
+    });
+
+    it('sets itself to inactive on click', function(done) {
+      let self = this;
+      let spy = sinon.spy();
+
+      let flash = {
+        message: 'my message',
+        type: 'success',
+        timeout: 3500,
+        destroyMessage: spy
+      };
+      this.set('flash', flash);
+      this.set('active', false);
+
+      this.render(hbs`
+        {{#custom-flash id="custom-flash" flash=flash active=active}}
+          flash.message
+        {{/custom-flash}}
+      `);
+
+      setTimeout(function() {
+        expect(self.get('active')).to.be.true;
+
+        self.$('#custom-flash').click();
+
+        setTimeout(function() {
+          expect(self.get('active')).to.be.false;
+          done();
+        }, 100);
+      }, 100);
     });
   }
 );

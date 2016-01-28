@@ -56,7 +56,7 @@ describeComponent(
       expect(this.$('.spec-mailing-list-checkbox').hasClass('md-checked')).to.be.false;
     });
 
-    it('submits the form with an ajax request', function() {
+    it('sends an action to submit the registration form', function() {
       let spy = sinon.spy();
       let firstName = 'Foo';
       let lastName = 'Bar';
@@ -66,25 +66,29 @@ describeComponent(
       this.set('lastNameValue', lastName);
       this.set('emailValue', email);
       this.set('passwordValue', password);
+      this.set('submitUserRegister', spy);
 
-      Ember.$.ajax = function(request) {
-        expect(request.type).to.equal('POST');
-        expect(request.url).to.equal('/api/register');
-        expect(request.data.data.attributes.firstName).to.equal(firstName);
-        expect(request.data.data.attributes.lastName).to.equal(lastName);
-        expect(request.data.data.attributes.email).to.equal(email);
-        expect(request.data.data.attributes.password).to.equal(password);
+      this.render(hbs`
+        {{user-register
+          submitUserRegister=(action submitUserRegister)
 
-        return {
-          done: function() {
-            return { fail: spy };
-          }
-        };
-      };
+          firstNameValue=firstNameValue
+          lastNameValue=lastNameValue
+          emailValue=emailValue
+          passwordValue=passwordValue
+          transitionToRoute=transitionToRoute}}
+      `);
 
       this.$('.spec-user-register-submit').click();
 
       sinon.assert.calledOnce(spy);
+      sinon.assert.calledWith(spy, {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password,
+        mailingList: false
+      });
     });
 
     describe('with transitionToRoute as true', function() {

@@ -14,5 +14,11 @@ export default function startApp(attrs) {
     application.injectTestHelpers();
   });
 
+  // Load in the current user
+  server.loadFixtures('users');
+
+  // Stub out Google Analytics
+  window.ga = undefined; 
+
   return application;
 }

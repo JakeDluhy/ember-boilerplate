@@ -7,10 +7,11 @@
 
         <div class="nav-section">
           {{#if session.isAuthenticated}}
-            <div class="nav-link">{{#link-to 'users.settings'}}Settings{{/link-to}}</div>
-            <div class="nav-link"><a href="#" {{action 'logoutUser'}}>Log Out</a></div>
+            {{#link-to 'users.settings' class="nav-link"}}Settings
+            {{/link-to}}<a href="#" class="nav-link" {{action 'logoutUser'}}>Log Out
+            </a>
           {{else}}
-            <div class="nav-link"><a href="#" {{action 'showLoginModal'}}>Log In</a></div>
+            <a href="#" class="nav-link" {{action 'showLoginModal'}}>Log In</a>
           {{/if}}
         </div>
       </div>
@@ -71,9 +72,9 @@
 
 {{#modal-dialog modalTitle='Log In' isOpen=loginModalOpen}}
   {{#if showLogin}}
-    {{user-login transitionToRoute=false onSubmitSuccess='closeLoginModal' transitionToReg=(action 'loginModalTransition')}}
+    {{user-login transitionToRoute=false transitionToReg=(action 'loginModalTransition') onSubmitSuccess='closeLoginModal'}}
   {{else}}
-    {{user-register transitionToRoute=false transitionToLogin=(action 'loginModalTransition')}}
+    {{user-register transitionToRoute=false transitionToLogin=(action 'loginModalTransition') submitUserRegister="submitUserRegister"}}
   {{/if}}
 {{/modal-dialog}}
 

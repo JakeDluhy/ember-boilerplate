@@ -6,7 +6,24 @@
   {{/each}}
 {{/paper-select}}
 
-{{paper-input label="Name" value=nameValue class="spec-name-value"}}
-{{paper-input label="Email" value=emailValue required=true customValidation=emailValidation class='spec-email-value'}}
-{{paper-input label="Comment" textarea=true value=commentValue required=true class='spec-comment-value'}}
-{{#paper-button raised=true primary=true action="formSubmit" disabled=disableSubmit class="float-right spec-user-contact-submit"}}Submit{{/paper-button}}
+{{paper-input label="Name"
+              value=nameValue
+              class="spec-name-value"
+              event-enter=(action "formSubmit")}}
+{{paper-input label="Email"
+              value=emailValue
+              required=true
+              customValidation=emailValidation
+              class='spec-email-value'
+              event-enter=(action "formSubmit")}}
+{{paper-input label="Comment"
+              textarea=true
+              value=commentValue
+              required=true
+              class='spec-comment-value'
+              event-enter=(action "formSubmit")}}
+{{#paper-button raised=true
+                primary=true
+                action="formSubmit"
+                disabled=disableSubmit
+                class="float-right spec-user-contact-submit"}}Submit{{/paper-button}}

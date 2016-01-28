@@ -8,12 +8,14 @@ import {
 import { expect } from 'chai';
 import startApp from '../helpers/start-app';
 import destroyApp from '../helpers/destroy-app';
+// import stubLocalStorage from '../helpers/stub-local-storage';
 
-describe.only('Acceptance: Contact', function() {
+describe('Acceptance: Contact', function() {
   var application;
 
   beforeEach(function() {
     application = startApp();
+    // stubLocalStorage();
   });
 
   afterEach(function() {
@@ -40,11 +42,8 @@ describe.only('Acceptance: Contact', function() {
       click('.spec-user-contact-submit');
 
       andThen(() => {
-        // setTimeout(function() {
           expect(currentPath()).to.equal('index');
-          // expect($('.flash-content')).to.have.length(1);
-          // done();
-        // }, 100);
+          expect($('.flash-content')).to.have.length(1);
       });
     });
   });

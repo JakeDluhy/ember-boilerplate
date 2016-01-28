@@ -24,7 +24,8 @@
     "currentPath",
     "currentRouteName",
     "localStorage",
-    "sessionStorage"
+    "sessionStorage",
+    "ga"
   ],
   "node": false,
   "browser": false,

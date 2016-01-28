@@ -5,7 +5,7 @@ import {
   describeComponent,
   it
 } from 'ember-mocha';
-import { beforeEach } from 'mocha';
+import { beforeEach, describe } from 'mocha';
 import hbs from 'htmlbars-inline-precompile';
 import sinon from 'sinon';
 
@@ -52,34 +52,64 @@ describeComponent(
       expect(this.$('.spec-user-contact-submit').attr('disabled')).to.equal('disabled');
     });
 
-    it('submits the ajax request with form data on submit', function() {
-      let spy = sinon.spy();
-      let nameValue = 'Foo Bar';
-      let emailValue = 'foo.bar@example.com';
-      let commentValue = 'My comment';
+    describe('submitting the form', function() {
+      beforeEach(function() {
+        this.nameValue = 'Foo Bar';
+        this.emailValue = 'foo.bar@example.com';
+        this.commentValue = 'My comment';
 
-      this.set('nameValue', nameValue);
-      this.set('emailValue', emailValue);
-      this.set('commentValue', commentValue);
+        this.set('nameValue', this.nameValue);
+        this.set('emailValue', this.emailValue);
+        this.set('commentValue', this.commentValue);
+      });
 
-      Ember.$.ajax = function(request) {
-        expect(request.type).to.equal('POST');
-        expect(request.url).to.equal('/api/contact');
-        expect(request.data.data.attributes.contactType).to.equal('Reaching Out');
-        expect(request.data.data.attributes.name).to.equal(nameValue);
-        expect(request.data.data.attributes.fromEmail).to.equal(emailValue);
-        expect(request.data.data.attributes.content).to.equal(commentValue);
+      it('sends an action to persist the form data on submit', function() {
+        let spy = sinon.spy();
 
-        return {
-          done: function() {
-            return { fail: spy };
-          }
-        };
-      };
+        this.set('submitUserContact', spy);
 
-      this.$('.spec-user-contact-submit').click();
+        this.render(hbs`
+          {{user-contact
+            submitUserContact=(action submitUserContact)
 
-      sinon.assert.calledOnce(spy);
+            nameValue=nameValue
+            emailValue=emailValue
+            commentValue=commentValue}}
+        `);
+
+        this.$('.spec-user-contact-submit').click();
+
+        sinon.assert.calledOnce(spy);
+        sinon.assert.calledWith(spy, {
+          contactType: 'Reaching Out',
+          name: this.nameValue,
+          fromEmail: this.emailValue,
+          content: this.commentValue
+        });
+      });
+
+      it('triggers onContactSubmit if it is bound', function() {
+        let spy = sinon.spy();
+
+        this.set('onContactSubmit', spy);
+        this.set('submitUserContact', function() {});
+
+        this.render(hbs`
+          {{user-contact
+            submitUserContact=(action submitUserContact)
+            onContactSubmit=(action onContactSubmit)
+
+            nameValue=nameValue
+            emailValue=emailValue
+            commentValue=commentValue}}
+        `);
+
+        this.$('.spec-user-contact-submit').click();
+
+        sinon.assert.calledOnce(spy);
+      });
     });
+
+    
   }
 );

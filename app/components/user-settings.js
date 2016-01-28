@@ -37,6 +37,9 @@ export default Ember.Component.extend(AuthValidations, {
      * On success or fail, display a flash message
      */
     userSettingsSubmit() {
+      if(this.get('disableSubmit')) { return; }
+      
+      let flashMessages = Ember.get(this, 'flashMessages');
       this.get('current-user').updateUserAttributes({
         firstName: this.get('firstNameValue'),
         lastName: this.get('lastNameValue'),
@@ -44,10 +47,12 @@ export default Ember.Component.extend(AuthValidations, {
         mailingList: this.get('mailingList')
       })
       .then(() => {
-        Ember.get(this, 'flashMessages').success('Successfully updated!');
+        Ember.run(function() {
+          flashMessages.success('Successfully updated!');
+        });
       })
       .catch((err) => {
-        Ember.get(this, 'flashMessages').danger(err.errors.error);
+        flashMessages.danger(err.errors.error);
       });
     }
   }

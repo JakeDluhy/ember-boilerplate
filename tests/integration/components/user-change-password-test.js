@@ -139,7 +139,7 @@ describeComponent(
         this.render(hbs`
           {{user-change-password
             passwordReset=isPasswordReset
-            sendResetPassword=(action resetPassword)
+            submitResetPassword=(action resetPassword)
 
             newPasswordValue=newPasswordValue
             confirmNewPasswordValue=confirmNewPasswordValue}}

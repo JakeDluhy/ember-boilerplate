@@ -61,6 +61,8 @@ export default Ember.Component.extend(AuthValidations, {
 
   /** Update the current user using the current-user service, sending the new and old passwords */
   updateUserPassword() {
+    if(this.get('disableSubmit')) { return; }
+    
     var self = this;
 
     return self.get('current-user').updateUserPassword({
@@ -69,7 +71,6 @@ export default Ember.Component.extend(AuthValidations, {
     })
     .then(() => {
       Ember.get(this, 'flashMessages').success('Password successfully updated');
-      self.sendAction('transition', 'index');
     })
     .catch((err) => {
       Ember.get(this, 'flashMessages').danger(err.errors.error);
@@ -86,7 +87,7 @@ export default Ember.Component.extend(AuthValidations, {
     changePasswordSubmit() {
       if(this.passwordsAreEqual()) {
         if(this.get('passwordReset')) {
-          this.sendAction('sendResetPassword', this.get('newPasswordValue'));
+          this.sendAction('submitResetPassword', this.get('newPasswordValue'));
         } else {
           this.updateUserPassword();
         }
