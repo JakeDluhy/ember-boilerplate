@@ -35,7 +35,7 @@ In the admin panel, shown just after signup, there is a script tag code snippet.
 
 ## Deploying
 
-In order to deploy the app. First follow the setup at the [node-boilerplate](https://github.com/JakeDluhy/node-boilerplate) app. This details how to deploy the application assets to Amazon S3 and the index.html to Redis as per the [lightning deploy strategy]().
+In order to deploy the app. First follow the setup at the [node-boilerplate](https://github.com/JakeDluhy/node-boilerplate) app. This details how to deploy the application assets to Amazon S3 and the index.html to Postgres (or Redis) as per the [lightning deploy strategy]().
 
 What this means is once this setup is complete, a simple `ember deploy 'prod'` followed by `ember deploy:activate prod --revision={revision hash}` to activate the current deploy
 

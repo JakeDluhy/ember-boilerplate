@@ -9,10 +9,10 @@ var VALID_DEPLOY_TARGETS = [ //update these to match what you call your deployme
 module.exports = function(deployTarget) {
   var ENV = {
     build: {},
-    redis: {
-      allowOverwrite: true,
-      keyPrefix: envVars.appName+':index'
-    },
+    // redis: {
+    //   allowOverwrite: true,
+    //   keyPrefix: envVars.appName+':index'
+    // },
     s3: {
       prefix: envVars.appName
     }
@@ -23,8 +23,9 @@ module.exports = function(deployTarget) {
 
   if (deployTarget === 'dev') {
     ENV.build.environment = 'development';
-    ENV.redis.url = process.env.REDIS_URL || 'redis://127.0.0.1:6379/';
+    // ENV.redis.url = process.env.REDIS_URL || 'redis://127.0.0.1:6379/';
     ENV.plugins = ['build', 'redis']; // only care about deploying index.html into redis in dev
+    ENV.postgres = envVars.devPostgres;
   }
 
   if (deployTarget === 'qa' || deployTarget === 'prod') {
@@ -36,7 +37,7 @@ module.exports = function(deployTarget) {
   }
 
   if (deployTarget === 'qa') {
-    ENV.redis.url = process.env.QA_REDIS_URL;
+    // ENV.redis.url = process.env.QA_REDIS_URL;
   }
 
   if (deployTarget === 'prod') {
@@ -46,7 +47,8 @@ module.exports = function(deployTarget) {
       prepend: envVars.cdnUrl
     };
 
-    ENV.redis.host = 'localhost';
+    // ENV.redis.host = 'localhost';
+    ENV.postgres = envVars.prodPostgres;
     ENV['ssh-tunnel'] = envVars.tunnelConfig;
   }
 
