@@ -42,6 +42,7 @@ What this means is once this setup is complete, a simple `ember deploy 'prod'` f
 ## Running / Development
 
 * `ember server`
+* To proxy to the backend, run `ember server --proxy http://localhost:3300
 * Visit your app at [http://localhost:4200](http://localhost:4200).
 
 ### Code Generators
